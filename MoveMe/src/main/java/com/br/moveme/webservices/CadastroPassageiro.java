@@ -9,6 +9,7 @@ package com.br.moveme.webservices;
 import com.br.moveme.modelos.Passageiro;
 import com.br.moveme.dao.PassageiroDAO;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
@@ -27,16 +28,13 @@ public class CadastroPassageiro {
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastroPassageiro(String dadosPassageiro) {
         Gson gson = new Gson();
+        
         PassageiroDAO dao = new PassageiroDAO();
-        
         Passageiro passageiro = new Gson().fromJson(dadosPassageiro, Passageiro.class);
-        
         try {
             dao.inseriPassageiro(passageiro);
         } catch (Exception ex) {
             System.out.println("Erro ao inserir passageiro");
         }
-
-        System.out.println(passageiro.toString());
     }
 }
