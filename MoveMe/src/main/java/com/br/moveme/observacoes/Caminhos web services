@@ -1,0 +1,5 @@
+Para acessar o cadastro do passageiro acesse:
+http://localhost:8080/MoveMe/rest/cadastropassageiro/inserirpassageiro
+
+no header insira: content-type;application/json
+no body insira: {"cpf":"12345678","email":"lucas@gmail.com","nome":"Lucas","senha":"senha doida","sobrenome":"Lourenço","telefone":"111111111"}
