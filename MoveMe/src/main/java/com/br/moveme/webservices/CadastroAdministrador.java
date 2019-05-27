@@ -5,32 +5,33 @@
  */
 package com.br.moveme.webservices;
 
-import com.br.moveme.modelos.Motorista;
+import com.br.moveme.modelos.Administrador;
 import com.google.gson.Gson;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+
 /**
  *
  * @author Lucas
  */
-@Path("/cadastromotoritsta")
-public class CadastroMotorista {
+@Path("/cadastroadministrador")
+public class CadastroAdministrador {
     
     @POST
-    @Path("/inserirmotoritsta")
+    @Path("/inseriradministrador")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cadastroMotorista(String dadosMotorista) {
+    public void cadastroAdministrador(String dadosAdministrador) {
         Gson gson = new Gson();
         
         //PassageiroDAO dao = new PassageiroDAO();
-        Motorista motorista = new Gson().fromJson(dadosMotorista, Motorista.class);
+        Administrador administrador = new Gson().fromJson(dadosAdministrador, Administrador.class);
         try {
             //parte de inserir com jpa aqui para quem for fazer
             //dao.inseriPassageiro(motorista);
         } catch (Exception ex) {
-            System.out.println("Erro ao inserir motorista");
+            System.out.println("Erro ao inserir administrador");
         }
     }
 }
