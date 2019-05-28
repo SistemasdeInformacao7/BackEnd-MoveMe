@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.moveme.modelos;
+package com.br.moveme.modelo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -20,12 +20,16 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lucas
+ * @author omupa
  */
 @Entity
 @Table(name = "administrador")
 @NamedQueries({
-    @NamedQuery(name = "Administrador.findAll", query = "SELECT a FROM Administrador a")})
+    @NamedQuery(name = "Administrador.findAll", query = "SELECT a FROM Administrador a"),
+    @NamedQuery(name = "Administrador.findById", query = "SELECT a FROM Administrador a WHERE a.id = :id"),
+    @NamedQuery(name = "Administrador.findBySenha", query = "SELECT a FROM Administrador a WHERE a.senha = :senha"),
+    @NamedQuery(name = "Administrador.findByEmail", query = "SELECT a FROM Administrador a WHERE a.email = :email"),
+    @NamedQuery(name = "Administrador.findByNome", query = "SELECT a FROM Administrador a WHERE a.nome = :nome")})
 public class Administrador implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -117,7 +121,7 @@ public class Administrador implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.config.Administrador[ id=" + id + " ]";
+        return "com.br.moveme.modelo.Administrador[ id=" + id + " ]";
     }
     
 }

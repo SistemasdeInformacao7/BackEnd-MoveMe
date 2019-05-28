@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.moveme.modelos;
+package com.br.moveme.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -21,12 +23,15 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Lucas
+ * @author omupa
  */
 @Entity
 @Table(name = "usuario_avalia_restaurante")
 @NamedQueries({
-    @NamedQuery(name = "UsuarioAvaliaRestaurante.findAll", query = "SELECT u FROM UsuarioAvaliaRestaurante u")})
+    @NamedQuery(name = "UsuarioAvaliaRestaurante.findAll", query = "SELECT u FROM UsuarioAvaliaRestaurante u"),
+    @NamedQuery(name = "UsuarioAvaliaRestaurante.findById", query = "SELECT u FROM UsuarioAvaliaRestaurante u WHERE u.id = :id"),
+    @NamedQuery(name = "UsuarioAvaliaRestaurante.findByAvaliacao", query = "SELECT u FROM UsuarioAvaliaRestaurante u WHERE u.avaliacao = :avaliacao"),
+    @NamedQuery(name = "UsuarioAvaliaRestaurante.findByDia", query = "SELECT u FROM UsuarioAvaliaRestaurante u WHERE u.dia = :dia")})
 public class UsuarioAvaliaRestaurante implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,10 +45,12 @@ public class UsuarioAvaliaRestaurante implements Serializable {
     @Column(name = "dia")
     @Temporal(TemporalType.DATE)
     private Date dia;
-    @Column(name = "idrestaurante")
-    private Integer idrestaurante;
-    @Column(name = "cpfpassageiro")
-    private Integer cpfpassageiro;
+    @JoinColumn(name = "idrestaurante", referencedColumnName = "id")
+    @ManyToOne
+    private Restaurante idrestaurante;
+    @JoinColumn(name = "cpfusuario", referencedColumnName = "cpf")
+    @ManyToOne
+    private Usuario cpfusuario;
 
     public UsuarioAvaliaRestaurante() {
     }
@@ -76,20 +83,20 @@ public class UsuarioAvaliaRestaurante implements Serializable {
         this.dia = dia;
     }
 
-    public Integer getIdrestaurante() {
+    public Restaurante getIdrestaurante() {
         return idrestaurante;
     }
 
-    public void setIdrestaurante(Integer idrestaurante) {
+    public void setIdrestaurante(Restaurante idrestaurante) {
         this.idrestaurante = idrestaurante;
     }
 
-    public Integer getCpfpassageiro() {
-        return cpfpassageiro;
+    public Usuario getCpfusuario() {
+        return cpfusuario;
     }
 
-    public void setCpfpassageiro(Integer cpfpassageiro) {
-        this.cpfpassageiro = cpfpassageiro;
+    public void setCpfusuario(Usuario cpfusuario) {
+        this.cpfusuario = cpfusuario;
     }
 
     @Override
@@ -114,7 +121,7 @@ public class UsuarioAvaliaRestaurante implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.config.UsuarioAvaliaRestaurante[ id=" + id + " ]";
+        return "com.br.moveme.modelo.UsuarioAvaliaRestaurante[ id=" + id + " ]";
     }
     
 }

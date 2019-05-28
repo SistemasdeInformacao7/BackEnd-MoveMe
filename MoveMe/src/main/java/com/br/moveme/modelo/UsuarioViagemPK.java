@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.moveme.modelos;
+package com.br.moveme.modelo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Lucas
+ * @author omupa
  */
 @Embeddable
 public class UsuarioViagemPK implements Serializable {
@@ -77,7 +77,7 @@ public class UsuarioViagemPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.config.UsuarioViagemPK[ idviagem=" + idviagem + ", idusuario=" + idusuario + " ]";
+        return "com.br.moveme.modelo.UsuarioViagemPK[ idviagem=" + idviagem + ", idusuario=" + idusuario + " ]";
     }
     
 }

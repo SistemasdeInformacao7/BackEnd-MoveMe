@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.moveme.modelos;
+package com.br.moveme.modelo;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,17 +15,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lucas
+ * @author omupa
  */
 @Entity
-@Table(name = "veiculo")
+@Table(name = "motorista")
 @NamedQueries({
-    @NamedQuery(name = "Veiculo.findAll", query = "SELECT v FROM Veiculo v")})
-public class Veiculo implements Serializable {
+    @NamedQuery(name = "Motorista.findAll", query = "SELECT m FROM Motorista m"),
+    @NamedQuery(name = "Motorista.findById", query = "SELECT m FROM Motorista m WHERE m.id = :id"),
+    @NamedQuery(name = "Motorista.findByNome", query = "SELECT m FROM Motorista m WHERE m.nome = :nome")})
+public class Motorista implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -32,13 +37,16 @@ public class Veiculo implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "numero_vagas")
-    private Integer numeroVagas;
+    @Size(max = 100)
+    @Column(name = "nome")
+    private String nome;
+    @OneToMany(mappedBy = "idmotorista")
+    private Collection<Viagem> viagemCollection;
 
-    public Veiculo() {
+    public Motorista() {
     }
 
-    public Veiculo(Integer id) {
+    public Motorista(Integer id) {
         this.id = id;
     }
 
@@ -50,12 +58,20 @@ public class Veiculo implements Serializable {
         this.id = id;
     }
 
-    public Integer getNumeroVagas() {
-        return numeroVagas;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNumeroVagas(Integer numeroVagas) {
-        this.numeroVagas = numeroVagas;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Collection<Viagem> getViagemCollection() {
+        return viagemCollection;
+    }
+
+    public void setViagemCollection(Collection<Viagem> viagemCollection) {
+        this.viagemCollection = viagemCollection;
     }
 
     @Override
@@ -68,10 +84,10 @@ public class Veiculo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Veiculo)) {
+        if (!(object instanceof Motorista)) {
             return false;
         }
-        Veiculo other = (Veiculo) object;
+        Motorista other = (Motorista) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -80,7 +96,7 @@ public class Veiculo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.config.Veiculo[ id=" + id + " ]";
+        return "com.br.moveme.modelo.Motorista[ id=" + id + " ]";
     }
     
 }

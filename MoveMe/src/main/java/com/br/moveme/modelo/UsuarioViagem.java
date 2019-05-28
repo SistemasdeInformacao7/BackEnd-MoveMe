@@ -3,24 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.moveme.modelos;
+package com.br.moveme.modelo;
 
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
  *
- * @author Lucas
+ * @author omupa
  */
 @Entity
 @Table(name = "usuario_viagem")
 @NamedQueries({
-    @NamedQuery(name = "UsuarioViagem.findAll", query = "SELECT u FROM UsuarioViagem u")})
+    @NamedQuery(name = "UsuarioViagem.findAll", query = "SELECT u FROM UsuarioViagem u"),
+    @NamedQuery(name = "UsuarioViagem.findByIdviagem", query = "SELECT u FROM UsuarioViagem u WHERE u.usuarioViagemPK.idviagem = :idviagem"),
+    @NamedQuery(name = "UsuarioViagem.findByIdusuario", query = "SELECT u FROM UsuarioViagem u WHERE u.usuarioViagemPK.idusuario = :idusuario"),
+    @NamedQuery(name = "UsuarioViagem.findByAvaliacao", query = "SELECT u FROM UsuarioViagem u WHERE u.avaliacao = :avaliacao"),
+    @NamedQuery(name = "UsuarioViagem.findByPreco", query = "SELECT u FROM UsuarioViagem u WHERE u.preco = :preco")})
 public class UsuarioViagem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,6 +36,12 @@ public class UsuarioViagem implements Serializable {
     private Integer avaliacao;
     @Column(name = "preco")
     private Long preco;
+    @JoinColumn(name = "idusuario", referencedColumnName = "cpf", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Usuario usuario;
+    @JoinColumn(name = "idviagem", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Viagem viagem;
 
     public UsuarioViagem() {
     }
@@ -66,6 +78,22 @@ public class UsuarioViagem implements Serializable {
         this.preco = preco;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Viagem getViagem() {
+        return viagem;
+    }
+
+    public void setViagem(Viagem viagem) {
+        this.viagem = viagem;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -88,7 +116,7 @@ public class UsuarioViagem implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.config.UsuarioViagem[ usuarioViagemPK=" + usuarioViagemPK + " ]";
+        return "com.br.moveme.modelo.UsuarioViagem[ usuarioViagemPK=" + usuarioViagemPK + " ]";
     }
     
 }

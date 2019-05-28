@@ -5,7 +5,7 @@
  */
 package com.br.moveme.webservices;
 
-import com.br.moveme.modelos.Motorista;
+import com.br.moveme.modelo.Motorista;
 import com.google.gson.Gson;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

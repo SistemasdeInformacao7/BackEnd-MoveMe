@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.br.moveme.modelos;
+package com.br.moveme.modelo;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,17 +15,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 /**
  *
- * @author Lucas
+ * @author omupa
  */
 @Entity
 @Table(name = "restaurante")
 @NamedQueries({
-    @NamedQuery(name = "Restaurante.findAll", query = "SELECT r FROM Restaurante r")})
+    @NamedQuery(name = "Restaurante.findAll", query = "SELECT r FROM Restaurante r"),
+    @NamedQuery(name = "Restaurante.findById", query = "SELECT r FROM Restaurante r WHERE r.id = :id"),
+    @NamedQuery(name = "Restaurante.findByCidade", query = "SELECT r FROM Restaurante r WHERE r.cidade = :cidade"),
+    @NamedQuery(name = "Restaurante.findByMoeda", query = "SELECT r FROM Restaurante r WHERE r.moeda = :moeda"),
+    @NamedQuery(name = "Restaurante.findByCozinha", query = "SELECT r FROM Restaurante r WHERE r.cozinha = :cozinha"),
+    @NamedQuery(name = "Restaurante.findByServicoOnline", query = "SELECT r FROM Restaurante r WHERE r.servicoOnline = :servicoOnline"),
+    @NamedQuery(name = "Restaurante.findByServicoAgora", query = "SELECT r FROM Restaurante r WHERE r.servicoAgora = :servicoAgora"),
+    @NamedQuery(name = "Restaurante.findByFaixaPreco", query = "SELECT r FROM Restaurante r WHERE r.faixaPreco = :faixaPreco")})
 public class Restaurante implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +57,8 @@ public class Restaurante implements Serializable {
     private Integer servicoAgora;
     @Column(name = "faixa_preco")
     private Long faixaPreco;
+    @OneToMany(mappedBy = "idrestaurante")
+    private Collection<UsuarioAvaliaRestaurante> usuarioAvaliaRestauranteCollection;
 
     public Restaurante() {
     }
@@ -112,6 +123,14 @@ public class Restaurante implements Serializable {
         this.faixaPreco = faixaPreco;
     }
 
+    public Collection<UsuarioAvaliaRestaurante> getUsuarioAvaliaRestauranteCollection() {
+        return usuarioAvaliaRestauranteCollection;
+    }
+
+    public void setUsuarioAvaliaRestauranteCollection(Collection<UsuarioAvaliaRestaurante> usuarioAvaliaRestauranteCollection) {
+        this.usuarioAvaliaRestauranteCollection = usuarioAvaliaRestauranteCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -134,7 +153,7 @@ public class Restaurante implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.config.Restaurante[ id=" + id + " ]";
+        return "com.br.moveme.modelo.Restaurante[ id=" + id + " ]";
     }
     
 }
