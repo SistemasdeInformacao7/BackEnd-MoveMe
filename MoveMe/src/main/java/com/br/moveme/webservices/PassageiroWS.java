@@ -19,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -47,7 +48,7 @@ public class PassageiroWS {
 
     @GET
     @Path("/getall")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String getAll() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
@@ -55,20 +56,28 @@ public class PassageiroWS {
         Gson gson = new Gson();
         List<Usuario> lista = null;
         String saida = null;
-
+        List<Usuario> listaSimples = null;
         try {
             lista = usuarioJpaController.findUsuarioEntities();
+            
+            for(Usuario u : lista){
+                System.out.println("Usuario lista: " + u.toString());
+            }
+            
             saida = new Gson().toJson(lista);
+            
+            System.out.println("Saida JSON: " + saida);
         } catch (Exception e) {
             System.out.println("PassageiroWS - listar todos: " + e);
         }
         return saida;
     }
 
+    
     @GET
-    @Path("/getid")
+    @Path("/{cpf}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String get(int id) {
+    public String get(@PathParam("cpf") int cpf)  {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 
@@ -77,7 +86,7 @@ public class PassageiroWS {
         String saida = null;
 
         try {
-            usuario = usuarioJpaController.findUsuario(id);
+            usuario = usuarioJpaController.findUsuario(cpf);
             saida = new Gson().toJson(usuario);
         } catch (Exception e) {
             System.out.println("PassageiroWS - listar todos: " + e);
