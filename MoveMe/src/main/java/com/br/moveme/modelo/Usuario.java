@@ -153,7 +153,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.modelo.Usuario[ cpf=" + cpf + " ]";
+        return "Usuario{" + "cpf=" + cpf + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + '}';
     }
     
 }
