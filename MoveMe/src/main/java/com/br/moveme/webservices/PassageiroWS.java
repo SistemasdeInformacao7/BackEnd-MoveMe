@@ -22,19 +22,20 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author Lucas/Otavio
  */
-@Path("/usuario")
-public class UsuarioWS {
+@Path("/passageiro")
+public class PassageiroWS {
 
     @POST
     @Path("/inserir")
     @Consumes(MediaType.APPLICATION_JSON)
     public void inserir(String dadosUsuario) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgcoelectaPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 
         Gson gson = new Gson();
@@ -43,55 +44,62 @@ public class UsuarioWS {
         try {
             usuarioJpaController.create(usuario);
         } catch (Exception ex) {
-            System.out.println("UsuarioWS - erro ao inserir: " + ex);
+            System.out.println("PassageiroWS - erro ao inserir: " + ex);
         }
     }
 
     @GET
     @Path("/getall")
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Usuario> getAll() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgcoelectaPU");
+    public String getAll() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 
+        Gson gson = new Gson();
         List<Usuario> lista = null;
+        String saida = null;
 
         try {
             lista = usuarioJpaController.findUsuarioEntities();
+            saida = new Gson().toJson(lista);
         } catch (Exception e) {
-            System.out.println("UsuarioWS - listar todos: " + e);
+            System.out.println("PassageiroWS - listar todos: " + e);
         }
-        return lista;
+        return saida;
     }
 
     @GET
     @Path("/getid")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Usuario get(int id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgcoelectaPU");
+    public String get(int id) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 
         Usuario usuario = null;
+        Gson gson = new Gson();
+        String saida = null;
 
         try {
             usuario = usuarioJpaController.findUsuario(id);
+            saida = new Gson().toJson(usuario);
         } catch (Exception e) {
-            System.out.println("UsuarioWS - listar todos: " + e);
+            System.out.println("PassageiroWS - listar todos: " + e);
         }
-        return usuario;
+        return saida;
     }
 
     @PUT
     @Path("/editar")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void editar(String dadosUsuario) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgcoelectaPU");
+    public String editar(String dadosUsuario) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
         EntityManager em = emf.createEntityManager();
 
         Usuario usuario = new Gson().fromJson(dadosUsuario, Usuario.class);
         Usuario usuario1 = usuarioJpaController.findUsuario(usuario.getCpf());
-
+        Gson gson = new Gson();
+        
         try {
             em.getTransaction().begin();
             usuario1.setEmail(usuario.getEmail());
@@ -100,21 +108,31 @@ public class UsuarioWS {
             usuario1.setTelefone(usuario.getTelefone());
             em.getTransaction().commit();
         } catch (Exception e) {
-            System.out.println("UsuarioWS - erro ao editar: " + e);
+            System.out.println("PassageiroWS - erro ao editar: " + e);
         }
+        
+        Usuario verificaUsuario = usuarioJpaController.findUsuario(usuario1.getCpf());
+        
+        return new Gson().toJson(verificaUsuario);
     }
 
     @DELETE
     @Path("/remover")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void remover(int cpf) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgcoelectaPU");
+    public String remover(int cpf) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
+
+        Gson gson = new Gson();
+        String saida = null;
 
         try {
             usuarioJpaController.destroy(cpf);
+            //saida = new Gson().toJson(usuarioJpaController.findUsuario(cpf));
         } catch (Exception e) {
-            System.out.println("UsuarioWS - erro ao remover: " + e);
+            System.out.println("PassageiroWS - erro ao remover: " + e);
         }
+        
+        return new Gson().toJson(usuarioJpaController.findUsuario(cpf));
     }
 }
