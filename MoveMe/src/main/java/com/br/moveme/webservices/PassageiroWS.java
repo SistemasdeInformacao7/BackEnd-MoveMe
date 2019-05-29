@@ -8,10 +8,7 @@ package com.br.moveme.webservices;
 import com.br.moveme.controle.jpa.UsuarioJpaController;
 import com.br.moveme.modelo.Usuario;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -21,8 +18,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -117,9 +114,9 @@ public class PassageiroWS {
     }
 
     @DELETE
-    @Path("/remover")
+    @Path("/{cpf}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String remover(int cpf) {
+    public String remover(@PathParam("cpf") int cpf) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 
