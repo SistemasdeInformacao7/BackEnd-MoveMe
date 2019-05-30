@@ -26,22 +26,18 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "motorista")
 @NamedQueries({
-    @NamedQuery(name = "Motorista.findAll", query = "SELECT m FROM Motorista m"),
-    @NamedQuery(name = "Motorista.findById", query = "SELECT m FROM Motorista m WHERE m.id = :id"),
-    @NamedQuery(name = "Motorista.findByNome", query = "SELECT m FROM Motorista m WHERE m.nome = :nome")})
+    @NamedQuery(name = "Motorista.findAll", query = "SELECT m FROM Motorista m")})
 public class Motorista implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
+    @Basic(optional = true)
     @Column(name = "id")
     private Integer id;
     @Size(max = 100)
     @Column(name = "nome")
     private String nome;
-    @OneToMany(mappedBy = "idmotorista")
-    private Collection<Viagem> viagemCollection;
 
     public Motorista() {
     }
@@ -66,14 +62,6 @@ public class Motorista implements Serializable {
         this.nome = nome;
     }
 
-    public Collection<Viagem> getViagemCollection() {
-        return viagemCollection;
-    }
-
-    public void setViagemCollection(Collection<Viagem> viagemCollection) {
-        this.viagemCollection = viagemCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -96,7 +84,7 @@ public class Motorista implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.modelo.Motorista[ id=" + id + " ]";
+        return "Motorista{" + "id=" + id + ", nome=" + nome + '}';
     }
-    
+
 }

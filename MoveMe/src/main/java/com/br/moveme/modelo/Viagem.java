@@ -31,16 +31,13 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "viagem")
 @NamedQueries({
-    @NamedQuery(name = "Viagem.findAll", query = "SELECT v FROM Viagem v"),
-    @NamedQuery(name = "Viagem.findById", query = "SELECT v FROM Viagem v WHERE v.id = :id"),
-    @NamedQuery(name = "Viagem.findByDia", query = "SELECT v FROM Viagem v WHERE v.dia = :dia"),
-    @NamedQuery(name = "Viagem.findByNota", query = "SELECT v FROM Viagem v WHERE v.nota = :nota")})
+    @NamedQuery(name = "Viagem.findAll", query = "SELECT v FROM Viagem v")})
 public class Viagem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
+    @Basic(optional = true)
     @Column(name = "id")
     private Integer id;
     @Column(name = "dia")

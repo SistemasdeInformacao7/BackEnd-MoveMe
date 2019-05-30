@@ -12,7 +12,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.br.moveme.modelo.Restaurante;
-import com.br.moveme.modelo.Usuario;
 import com.br.moveme.modelo.UsuarioAvaliaRestaurante;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -43,19 +42,10 @@ public class UsuarioAvaliaRestauranteJpaController implements Serializable {
                 idrestaurante = em.getReference(idrestaurante.getClass(), idrestaurante.getId());
                 usuarioAvaliaRestaurante.setIdrestaurante(idrestaurante);
             }
-            Usuario cpfusuario = usuarioAvaliaRestaurante.getCpfusuario();
-            if (cpfusuario != null) {
-                cpfusuario = em.getReference(cpfusuario.getClass(), cpfusuario.getCpf());
-                usuarioAvaliaRestaurante.setCpfusuario(cpfusuario);
-            }
             em.persist(usuarioAvaliaRestaurante);
             if (idrestaurante != null) {
                 idrestaurante.getUsuarioAvaliaRestauranteCollection().add(usuarioAvaliaRestaurante);
                 idrestaurante = em.merge(idrestaurante);
-            }
-            if (cpfusuario != null) {
-                cpfusuario.getUsuarioAvaliaRestauranteCollection().add(usuarioAvaliaRestaurante);
-                cpfusuario = em.merge(cpfusuario);
             }
             em.getTransaction().commit();
         } finally {
@@ -73,15 +63,9 @@ public class UsuarioAvaliaRestauranteJpaController implements Serializable {
             UsuarioAvaliaRestaurante persistentUsuarioAvaliaRestaurante = em.find(UsuarioAvaliaRestaurante.class, usuarioAvaliaRestaurante.getId());
             Restaurante idrestauranteOld = persistentUsuarioAvaliaRestaurante.getIdrestaurante();
             Restaurante idrestauranteNew = usuarioAvaliaRestaurante.getIdrestaurante();
-            Usuario cpfusuarioOld = persistentUsuarioAvaliaRestaurante.getCpfusuario();
-            Usuario cpfusuarioNew = usuarioAvaliaRestaurante.getCpfusuario();
             if (idrestauranteNew != null) {
                 idrestauranteNew = em.getReference(idrestauranteNew.getClass(), idrestauranteNew.getId());
                 usuarioAvaliaRestaurante.setIdrestaurante(idrestauranteNew);
-            }
-            if (cpfusuarioNew != null) {
-                cpfusuarioNew = em.getReference(cpfusuarioNew.getClass(), cpfusuarioNew.getCpf());
-                usuarioAvaliaRestaurante.setCpfusuario(cpfusuarioNew);
             }
             usuarioAvaliaRestaurante = em.merge(usuarioAvaliaRestaurante);
             if (idrestauranteOld != null && !idrestauranteOld.equals(idrestauranteNew)) {
@@ -91,14 +75,6 @@ public class UsuarioAvaliaRestauranteJpaController implements Serializable {
             if (idrestauranteNew != null && !idrestauranteNew.equals(idrestauranteOld)) {
                 idrestauranteNew.getUsuarioAvaliaRestauranteCollection().add(usuarioAvaliaRestaurante);
                 idrestauranteNew = em.merge(idrestauranteNew);
-            }
-            if (cpfusuarioOld != null && !cpfusuarioOld.equals(cpfusuarioNew)) {
-                cpfusuarioOld.getUsuarioAvaliaRestauranteCollection().remove(usuarioAvaliaRestaurante);
-                cpfusuarioOld = em.merge(cpfusuarioOld);
-            }
-            if (cpfusuarioNew != null && !cpfusuarioNew.equals(cpfusuarioOld)) {
-                cpfusuarioNew.getUsuarioAvaliaRestauranteCollection().add(usuarioAvaliaRestaurante);
-                cpfusuarioNew = em.merge(cpfusuarioNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -133,11 +109,6 @@ public class UsuarioAvaliaRestauranteJpaController implements Serializable {
             if (idrestaurante != null) {
                 idrestaurante.getUsuarioAvaliaRestauranteCollection().remove(usuarioAvaliaRestaurante);
                 idrestaurante = em.merge(idrestaurante);
-            }
-            Usuario cpfusuario = usuarioAvaliaRestaurante.getCpfusuario();
-            if (cpfusuario != null) {
-                cpfusuario.getUsuarioAvaliaRestauranteCollection().remove(usuarioAvaliaRestaurante);
-                cpfusuario = em.merge(cpfusuario);
             }
             em.remove(usuarioAvaliaRestaurante);
             em.getTransaction().commit();

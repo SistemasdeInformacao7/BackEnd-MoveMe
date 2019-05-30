@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -24,15 +25,16 @@ public class UsuarioViagemPK implements Serializable {
     private int idviagem;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idusuario")
-    private int idusuario;
+    @Size(min = 1, max = 11)
+    @Column(name = "cpfusuario")
+    private String cpfusuario;
 
     public UsuarioViagemPK() {
     }
 
-    public UsuarioViagemPK(int idviagem, int idusuario) {
+    public UsuarioViagemPK(int idviagem, String cpfusuario) {
         this.idviagem = idviagem;
-        this.idusuario = idusuario;
+        this.cpfusuario = cpfusuario;
     }
 
     public int getIdviagem() {
@@ -43,19 +45,19 @@ public class UsuarioViagemPK implements Serializable {
         this.idviagem = idviagem;
     }
 
-    public int getIdusuario() {
-        return idusuario;
+    public String getCpfusuario() {
+        return cpfusuario;
     }
 
-    public void setIdusuario(int idusuario) {
-        this.idusuario = idusuario;
+    public void setCpfusuario(String cpfusuario) {
+        this.cpfusuario = cpfusuario;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idviagem;
-        hash += (int) idusuario;
+        hash += (cpfusuario != null ? cpfusuario.hashCode() : 0);
         return hash;
     }
 
@@ -69,7 +71,7 @@ public class UsuarioViagemPK implements Serializable {
         if (this.idviagem != other.idviagem) {
             return false;
         }
-        if (this.idusuario != other.idusuario) {
+        if ((this.cpfusuario == null && other.cpfusuario != null) || (this.cpfusuario != null && !this.cpfusuario.equals(other.cpfusuario))) {
             return false;
         }
         return true;
@@ -77,7 +79,7 @@ public class UsuarioViagemPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.modelo.UsuarioViagemPK[ idviagem=" + idviagem + ", idusuario=" + idusuario + " ]";
+        return "com.br.moveme.modelo.UsuarioViagemPK[ idviagem=" + idviagem + ", cpfusuario=" + cpfusuario + " ]";
     }
     
 }

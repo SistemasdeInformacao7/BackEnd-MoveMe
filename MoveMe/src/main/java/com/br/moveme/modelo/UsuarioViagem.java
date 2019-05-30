@@ -22,11 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "usuario_viagem")
 @NamedQueries({
-    @NamedQuery(name = "UsuarioViagem.findAll", query = "SELECT u FROM UsuarioViagem u"),
-    @NamedQuery(name = "UsuarioViagem.findByIdviagem", query = "SELECT u FROM UsuarioViagem u WHERE u.usuarioViagemPK.idviagem = :idviagem"),
-    @NamedQuery(name = "UsuarioViagem.findByIdusuario", query = "SELECT u FROM UsuarioViagem u WHERE u.usuarioViagemPK.idusuario = :idusuario"),
-    @NamedQuery(name = "UsuarioViagem.findByAvaliacao", query = "SELECT u FROM UsuarioViagem u WHERE u.avaliacao = :avaliacao"),
-    @NamedQuery(name = "UsuarioViagem.findByPreco", query = "SELECT u FROM UsuarioViagem u WHERE u.preco = :preco")})
+    @NamedQuery(name = "UsuarioViagem.findAll", query = "SELECT u FROM UsuarioViagem u")})
 public class UsuarioViagem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,7 +32,7 @@ public class UsuarioViagem implements Serializable {
     private Integer avaliacao;
     @Column(name = "preco")
     private Long preco;
-    @JoinColumn(name = "idusuario", referencedColumnName = "cpf", insertable = false, updatable = false)
+    @JoinColumn(name = "cpfusuario", referencedColumnName = "cpf", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
     @JoinColumn(name = "idviagem", referencedColumnName = "id", insertable = false, updatable = false)
@@ -50,8 +46,8 @@ public class UsuarioViagem implements Serializable {
         this.usuarioViagemPK = usuarioViagemPK;
     }
 
-    public UsuarioViagem(int idviagem, int idusuario) {
-        this.usuarioViagemPK = new UsuarioViagemPK(idviagem, idusuario);
+    public UsuarioViagem(int idviagem, String cpfusuario) {
+        this.usuarioViagemPK = new UsuarioViagemPK(idviagem, cpfusuario);
     }
 
     public UsuarioViagemPK getUsuarioViagemPK() {

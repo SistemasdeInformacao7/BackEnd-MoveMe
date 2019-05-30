@@ -8,16 +8,13 @@ package com.br.moveme.controle.jpa;
 import com.br.moveme.controle.jpa.exceptions.NonexistentEntityException;
 import com.br.moveme.modelo.Veiculo;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.br.moveme.modelo.Viagem;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -35,29 +32,11 @@ public class VeiculoJpaController implements Serializable {
     }
 
     public void create(Veiculo veiculo) {
-        if (veiculo.getViagemCollection() == null) {
-            veiculo.setViagemCollection(new ArrayList<Viagem>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Viagem> attachedViagemCollection = new ArrayList<Viagem>();
-            for (Viagem viagemCollectionViagemToAttach : veiculo.getViagemCollection()) {
-                viagemCollectionViagemToAttach = em.getReference(viagemCollectionViagemToAttach.getClass(), viagemCollectionViagemToAttach.getId());
-                attachedViagemCollection.add(viagemCollectionViagemToAttach);
-            }
-            veiculo.setViagemCollection(attachedViagemCollection);
             em.persist(veiculo);
-            for (Viagem viagemCollectionViagem : veiculo.getViagemCollection()) {
-                Veiculo oldIdveiculoOfViagemCollectionViagem = viagemCollectionViagem.getIdveiculo();
-                viagemCollectionViagem.setIdveiculo(veiculo);
-                viagemCollectionViagem = em.merge(viagemCollectionViagem);
-                if (oldIdveiculoOfViagemCollectionViagem != null) {
-                    oldIdveiculoOfViagemCollectionViagem.getViagemCollection().remove(viagemCollectionViagem);
-                    oldIdveiculoOfViagemCollectionViagem = em.merge(oldIdveiculoOfViagemCollectionViagem);
-                }
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -71,34 +50,7 @@ public class VeiculoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Veiculo persistentVeiculo = em.find(Veiculo.class, veiculo.getId());
-            Collection<Viagem> viagemCollectionOld = persistentVeiculo.getViagemCollection();
-            Collection<Viagem> viagemCollectionNew = veiculo.getViagemCollection();
-            Collection<Viagem> attachedViagemCollectionNew = new ArrayList<Viagem>();
-            for (Viagem viagemCollectionNewViagemToAttach : viagemCollectionNew) {
-                viagemCollectionNewViagemToAttach = em.getReference(viagemCollectionNewViagemToAttach.getClass(), viagemCollectionNewViagemToAttach.getId());
-                attachedViagemCollectionNew.add(viagemCollectionNewViagemToAttach);
-            }
-            viagemCollectionNew = attachedViagemCollectionNew;
-            veiculo.setViagemCollection(viagemCollectionNew);
             veiculo = em.merge(veiculo);
-            for (Viagem viagemCollectionOldViagem : viagemCollectionOld) {
-                if (!viagemCollectionNew.contains(viagemCollectionOldViagem)) {
-                    viagemCollectionOldViagem.setIdveiculo(null);
-                    viagemCollectionOldViagem = em.merge(viagemCollectionOldViagem);
-                }
-            }
-            for (Viagem viagemCollectionNewViagem : viagemCollectionNew) {
-                if (!viagemCollectionOld.contains(viagemCollectionNewViagem)) {
-                    Veiculo oldIdveiculoOfViagemCollectionNewViagem = viagemCollectionNewViagem.getIdveiculo();
-                    viagemCollectionNewViagem.setIdveiculo(veiculo);
-                    viagemCollectionNewViagem = em.merge(viagemCollectionNewViagem);
-                    if (oldIdveiculoOfViagemCollectionNewViagem != null && !oldIdveiculoOfViagemCollectionNewViagem.equals(veiculo)) {
-                        oldIdveiculoOfViagemCollectionNewViagem.getViagemCollection().remove(viagemCollectionNewViagem);
-                        oldIdveiculoOfViagemCollectionNewViagem = em.merge(oldIdveiculoOfViagemCollectionNewViagem);
-                    }
-                }
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -127,11 +79,6 @@ public class VeiculoJpaController implements Serializable {
                 veiculo.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The veiculo with id " + id + " no longer exists.", enfe);
-            }
-            Collection<Viagem> viagemCollection = veiculo.getViagemCollection();
-            for (Viagem viagemCollectionViagem : viagemCollection) {
-                viagemCollectionViagem.setIdveiculo(null);
-                viagemCollectionViagem = em.merge(viagemCollectionViagem);
             }
             em.remove(veiculo);
             em.getTransaction().commit();

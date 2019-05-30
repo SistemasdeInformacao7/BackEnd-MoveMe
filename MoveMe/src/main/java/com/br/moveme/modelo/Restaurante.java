@@ -26,14 +26,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "restaurante")
 @NamedQueries({
-    @NamedQuery(name = "Restaurante.findAll", query = "SELECT r FROM Restaurante r"),
-    @NamedQuery(name = "Restaurante.findById", query = "SELECT r FROM Restaurante r WHERE r.id = :id"),
-    @NamedQuery(name = "Restaurante.findByCidade", query = "SELECT r FROM Restaurante r WHERE r.cidade = :cidade"),
-    @NamedQuery(name = "Restaurante.findByMoeda", query = "SELECT r FROM Restaurante r WHERE r.moeda = :moeda"),
-    @NamedQuery(name = "Restaurante.findByCozinha", query = "SELECT r FROM Restaurante r WHERE r.cozinha = :cozinha"),
-    @NamedQuery(name = "Restaurante.findByServicoOnline", query = "SELECT r FROM Restaurante r WHERE r.servicoOnline = :servicoOnline"),
-    @NamedQuery(name = "Restaurante.findByServicoAgora", query = "SELECT r FROM Restaurante r WHERE r.servicoAgora = :servicoAgora"),
-    @NamedQuery(name = "Restaurante.findByFaixaPreco", query = "SELECT r FROM Restaurante r WHERE r.faixaPreco = :faixaPreco")})
+    @NamedQuery(name = "Restaurante.findAll", query = "SELECT r FROM Restaurante r")})
 public class Restaurante implements Serializable {
 
     private static final long serialVersionUID = 1L;

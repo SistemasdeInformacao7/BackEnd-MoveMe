@@ -7,14 +7,13 @@ package com.br.moveme.controle.jpa;
 
 import com.br.moveme.controle.jpa.exceptions.NonexistentEntityException;
 import com.br.moveme.controle.jpa.exceptions.PreexistingEntityException;
+import com.br.moveme.modelo.UsuarioViagem;
+import com.br.moveme.modelo.UsuarioViagemPK;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.br.moveme.modelo.Usuario;
-import com.br.moveme.modelo.UsuarioViagem;
-import com.br.moveme.modelo.UsuarioViagemPK;
 import com.br.moveme.modelo.Viagem;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -39,27 +38,18 @@ public class UsuarioViagemJpaController implements Serializable {
         if (usuarioViagem.getUsuarioViagemPK() == null) {
             usuarioViagem.setUsuarioViagemPK(new UsuarioViagemPK());
         }
-        usuarioViagem.getUsuarioViagemPK().setIdusuario(usuarioViagem.getUsuario().getCpf());
         usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
+        usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Usuario usuario = usuarioViagem.getUsuario();
-            if (usuario != null) {
-                usuario = em.getReference(usuario.getClass(), usuario.getCpf());
-                usuarioViagem.setUsuario(usuario);
-            }
             Viagem viagem = usuarioViagem.getViagem();
             if (viagem != null) {
                 viagem = em.getReference(viagem.getClass(), viagem.getId());
                 usuarioViagem.setViagem(viagem);
             }
             em.persist(usuarioViagem);
-            if (usuario != null) {
-                usuario.getUsuarioViagemCollection().add(usuarioViagem);
-                usuario = em.merge(usuario);
-            }
             if (viagem != null) {
                 viagem.getUsuarioViagemCollection().add(usuarioViagem);
                 viagem = em.merge(viagem);
@@ -78,34 +68,20 @@ public class UsuarioViagemJpaController implements Serializable {
     }
 
     public void edit(UsuarioViagem usuarioViagem) throws NonexistentEntityException, Exception {
-        usuarioViagem.getUsuarioViagemPK().setIdusuario(usuarioViagem.getUsuario().getCpf());
         usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
+        usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             UsuarioViagem persistentUsuarioViagem = em.find(UsuarioViagem.class, usuarioViagem.getUsuarioViagemPK());
-            Usuario usuarioOld = persistentUsuarioViagem.getUsuario();
-            Usuario usuarioNew = usuarioViagem.getUsuario();
             Viagem viagemOld = persistentUsuarioViagem.getViagem();
             Viagem viagemNew = usuarioViagem.getViagem();
-            if (usuarioNew != null) {
-                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getCpf());
-                usuarioViagem.setUsuario(usuarioNew);
-            }
             if (viagemNew != null) {
                 viagemNew = em.getReference(viagemNew.getClass(), viagemNew.getId());
                 usuarioViagem.setViagem(viagemNew);
             }
             usuarioViagem = em.merge(usuarioViagem);
-            if (usuarioOld != null && !usuarioOld.equals(usuarioNew)) {
-                usuarioOld.getUsuarioViagemCollection().remove(usuarioViagem);
-                usuarioOld = em.merge(usuarioOld);
-            }
-            if (usuarioNew != null && !usuarioNew.equals(usuarioOld)) {
-                usuarioNew.getUsuarioViagemCollection().add(usuarioViagem);
-                usuarioNew = em.merge(usuarioNew);
-            }
             if (viagemOld != null && !viagemOld.equals(viagemNew)) {
                 viagemOld.getUsuarioViagemCollection().remove(usuarioViagem);
                 viagemOld = em.merge(viagemOld);
@@ -142,11 +118,6 @@ public class UsuarioViagemJpaController implements Serializable {
                 usuarioViagem.getUsuarioViagemPK();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuarioViagem with id " + id + " no longer exists.", enfe);
-            }
-            Usuario usuario = usuarioViagem.getUsuario();
-            if (usuario != null) {
-                usuario.getUsuarioViagemCollection().remove(usuarioViagem);
-                usuario = em.merge(usuario);
             }
             Viagem viagem = usuarioViagem.getViagem();
             if (viagem != null) {

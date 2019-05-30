@@ -32,11 +32,10 @@ public class PassageiroWS {
     @POST
     @Path("/inserir")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void inserir(String dadosUsuario) {
+    public String inserir(String dadosUsuario) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 
-        Gson gson = new Gson();
         Usuario usuario = new Gson().fromJson(dadosUsuario, Usuario.class);
 
         try {
@@ -44,6 +43,7 @@ public class PassageiroWS {
         } catch (Exception ex) {
             System.out.println("PassageiroWS - erro ao inserir: " + ex);
         }
+        return new Gson().toJson(usuarioJpaController.findUsuario(usuario.getCpf()));
     }
 
     @GET
@@ -77,7 +77,7 @@ public class PassageiroWS {
     @GET
     @Path("/{cpf}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String get(@PathParam("cpf") int cpf)  {
+    public String get(@PathParam("cpf") String cpf)  {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 
@@ -99,11 +99,10 @@ public class PassageiroWS {
     @Consumes(MediaType.APPLICATION_JSON)
     public String editar(String dadosUsuario) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
-        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
         EntityManager em = emf.createEntityManager();
 
         Usuario usuario = new Gson().fromJson(dadosUsuario, Usuario.class);
-        Usuario usuario1 = usuarioJpaController.findUsuario(usuario.getCpf());
+        Usuario usuario1 = em.find(Usuario.class, usuario.getCpf());
         Gson gson = new Gson();
         
         try {
@@ -117,7 +116,7 @@ public class PassageiroWS {
             System.out.println("PassageiroWS - erro ao editar: " + e);
         }
         
-        Usuario verificaUsuario = usuarioJpaController.findUsuario(usuario1.getCpf());
+        Usuario verificaUsuario = em.find(Usuario.class, usuario.getCpf());
         
         return new Gson().toJson(verificaUsuario);
     }
@@ -125,7 +124,7 @@ public class PassageiroWS {
     @DELETE
     @Path("/{cpf}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String remover(@PathParam("cpf") int cpf) {
+    public String remover(@PathParam("cpf") String cpf) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
 

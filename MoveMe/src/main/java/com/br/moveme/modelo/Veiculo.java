@@ -25,21 +25,17 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "veiculo")
 @NamedQueries({
-    @NamedQuery(name = "Veiculo.findAll", query = "SELECT v FROM Veiculo v"),
-    @NamedQuery(name = "Veiculo.findById", query = "SELECT v FROM Veiculo v WHERE v.id = :id"),
-    @NamedQuery(name = "Veiculo.findByNumeroVagas", query = "SELECT v FROM Veiculo v WHERE v.numeroVagas = :numeroVagas")})
+    @NamedQuery(name = "Veiculo.findAll", query = "SELECT v FROM Veiculo v")})
 public class Veiculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
+    @Basic(optional = true)
     @Column(name = "id")
     private Integer id;
     @Column(name = "numero_vagas")
     private Integer numeroVagas;
-    @OneToMany(mappedBy = "idveiculo")
-    private Collection<Viagem> viagemCollection;
 
     public Veiculo() {
     }
@@ -64,14 +60,6 @@ public class Veiculo implements Serializable {
         this.numeroVagas = numeroVagas;
     }
 
-    public Collection<Viagem> getViagemCollection() {
-        return viagemCollection;
-    }
-
-    public void setViagemCollection(Collection<Viagem> viagemCollection) {
-        this.viagemCollection = viagemCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -94,7 +82,7 @@ public class Veiculo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.br.moveme.modelo.Veiculo[ id=" + id + " ]";
+        return "Veiculo{" + "id=" + id + ", numeroVagas=" + numeroVagas + '}';
     }
-    
+
 }

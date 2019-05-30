@@ -6,18 +6,14 @@
 package com.br.moveme.modelo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -27,20 +23,16 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "usuario")
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findByCpf", query = "SELECT u FROM Usuario u WHERE u.cpf = :cpf"),
-    @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
-    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
-    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
-    @NamedQuery(name = "Usuario.findByTelefone", query = "SELECT u FROM Usuario u WHERE u.telefone = :telefone")})
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 11)
     @Column(name = "cpf")
-    private Integer cpf;
+    private String cpf;
     @Size(max = 100)
     @Column(name = "nome")
     private String nome;
@@ -51,27 +43,22 @@ public class Usuario implements Serializable {
     @Size(max = 100)
     @Column(name = "senha")
     private String senha;
+    @Size(max = 15)
     @Column(name = "telefone")
-    private Integer telefone;
-    @OneToMany(mappedBy = "cpfusuario")
-    private Collection<Viagem> viagemCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private Collection<UsuarioViagem> usuarioViagemCollection;
-    @OneToMany(mappedBy = "cpfusuario")
-    private Collection<UsuarioAvaliaRestaurante> usuarioAvaliaRestauranteCollection;
+    private String telefone;
 
     public Usuario() {
     }
 
-    public Usuario(Integer cpf) {
+    public Usuario(String cpf) {
         this.cpf = cpf;
     }
 
-    public Integer getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(Integer cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
@@ -99,36 +86,12 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
-    public Integer getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Integer telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public Collection<Viagem> getViagemCollection() {
-        return viagemCollection;
-    }
-
-    public void setViagemCollection(Collection<Viagem> viagemCollection) {
-        this.viagemCollection = viagemCollection;
-    }
-
-    public Collection<UsuarioViagem> getUsuarioViagemCollection() {
-        return usuarioViagemCollection;
-    }
-
-    public void setUsuarioViagemCollection(Collection<UsuarioViagem> usuarioViagemCollection) {
-        this.usuarioViagemCollection = usuarioViagemCollection;
-    }
-
-    public Collection<UsuarioAvaliaRestaurante> getUsuarioAvaliaRestauranteCollection() {
-        return usuarioAvaliaRestauranteCollection;
-    }
-
-    public void setUsuarioAvaliaRestauranteCollection(Collection<UsuarioAvaliaRestaurante> usuarioAvaliaRestauranteCollection) {
-        this.usuarioAvaliaRestauranteCollection = usuarioAvaliaRestauranteCollection;
     }
 
     @Override
@@ -155,5 +118,7 @@ public class Usuario implements Serializable {
     public String toString() {
         return "Usuario{" + "cpf=" + cpf + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + '}';
     }
+
+    
     
 }
