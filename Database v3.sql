@@ -72,7 +72,7 @@ CONSTRAINT FK_usuario_restaurante FOREIGN KEY(cpfusuario) REFERENCES usuario (cp
 
 CREATE USER 'master'@'%' IDENTIFIED BY '@Master123';
 flush privileges;
-grant select,insert,delete,update on moveme.* to 'admin'@'%';
+grant select,insert,delete,update on moveme.* to 'master'@'%';
 flush privileges;
 
 

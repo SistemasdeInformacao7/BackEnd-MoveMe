@@ -32,18 +32,18 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Lucas/Otavio
  */
-@Path("/viagem")
+@Path("/usuarioviagem")
 public class UsuarioViagemWS {
-
+    
     @POST
     @Path("/inserir")
     @Consumes(MediaType.APPLICATION_JSON)
     public String inserir(String dadosUsuarioViagem) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioViagemJpaController usuarioViagemJpaController = new UsuarioViagemJpaController(emf);
-
+        
         UsuarioViagem usuarioViagem = new Gson().fromJson(dadosUsuarioViagem, UsuarioViagem.class);
-
+        
         try {
             usuarioViagemJpaController.create(usuarioViagem);
         } catch (Exception ex) {
@@ -51,17 +51,17 @@ public class UsuarioViagemWS {
         }
         return new Gson().toJson(usuarioViagemJpaController.findUsuarioViagem(usuarioViagem.getUsuarioViagemPK()));
     }
-
+    
     @GET
     @Path("/getall")
     @Produces(MediaType.TEXT_PLAIN)
     public String getAll() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioViagemJpaController usuarioViagemJpaController = new UsuarioViagemJpaController(emf);
-
+        
         List<UsuarioViagem> lista = null;
         String saida = null;
-
+        
         try {
             lista = usuarioViagemJpaController.findUsuarioViagemEntities();
             saida = new Gson().toJson(lista);
@@ -70,7 +70,7 @@ public class UsuarioViagemWS {
         }
         return saida;
     }
-
+    
     @GET
     @Path("/getusuario")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -81,7 +81,7 @@ public class UsuarioViagemWS {
         UsuarioViagemPK usuarioViagemPK1 = new Gson().fromJson(usuarioViagemPK, UsuarioViagemPK.class);
         UsuarioViagem usuarioViagem = null;
         String saida = null;
-
+        
         try {
             usuarioViagem = usuarioViagemJpaController.findUsuarioViagem(usuarioViagemPK1);
             saida = new Gson().toJson(usuarioViagem);
@@ -90,14 +90,14 @@ public class UsuarioViagemWS {
         }
         return saida;
     }
-
+    
     @PUT
     @Path("/editar")
     @Consumes(MediaType.APPLICATION_JSON)
     public String editar(String dadosUsuarioViagem) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         EntityManager em = emf.createEntityManager();
-
+        
         UsuarioViagem usuarioViagem = new Gson().fromJson(dadosUsuarioViagem, UsuarioViagem.class);
         UsuarioViagem usuarioViagem1 = em.find(UsuarioViagem.class, usuarioViagem.getUsuarioViagemPK());
         Usuario usuario = em.find(Usuario.class, usuarioViagem.getUsuario());
@@ -113,15 +113,15 @@ public class UsuarioViagemWS {
             usuarioViagem1.setViagem(viagem);
             em.getTransaction().commit();
         } catch (Exception e) {
-
+            
             System.out.println("UsuarioViagemWS - erro ao editar: " + e);
         }
-
+        
         UsuarioViagem verificaUsuarioViagem = em.find(UsuarioViagem.class, usuarioViagem.getUsuarioViagemPK());
-
+        
         return new Gson().toJson(verificaUsuarioViagem);
     }
-
+    
     @DELETE
     @Path("/removerusuarioviagem")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -132,14 +132,14 @@ public class UsuarioViagemWS {
         UsuarioViagem usuarioViagem = new Gson().fromJson(dadosUsuarioViagem, UsuarioViagem.class);
         
         String saida = null;
-
+        
         try {
             usuarioViagemJpaController.destroy(usuarioViagem.getUsuarioViagemPK());
             //saida = new Gson().toJson(usuarioJpaController.findUsuario(cpf));
         } catch (Exception e) {
             System.out.println("UsuarioViagemWS - erro ao remover: " + e);
         }
-
+        
         return new Gson().toJson(usuarioViagemJpaController.findUsuarioViagem(usuarioViagem.getUsuarioViagemPK()));
     }
 }
