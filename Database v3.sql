@@ -7,7 +7,8 @@ id INTEGER PRIMARY KEY AUTO_INCREMENT,
 foto VARCHAR(500),
 senha VARCHAR(100),
 email VARCHAR(100),
-nome VARCHAR(100)
+nome VARCHAR(100),
+cod_recuperacao INT(5)
 );
 
 CREATE TABLE usuario (

@@ -24,7 +24,13 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "administrador")
 @NamedQueries({
-    @NamedQuery(name = "Administrador.findAll", query = "SELECT a FROM Administrador a")})
+    @NamedQuery(name = "Administrador.findAll", query = "SELECT a FROM Administrador a"),
+    @NamedQuery(name = "Administrador.findById", query = "SELECT a FROM Administrador a WHERE a.id = :id"),
+    @NamedQuery(name = "Administrador.findByFoto", query = "SELECT a FROM Administrador a WHERE a.foto = :foto"),
+    @NamedQuery(name = "Administrador.findBySenha", query = "SELECT a FROM Administrador a WHERE a.senha = :senha"),
+    @NamedQuery(name = "Administrador.findByEmail", query = "SELECT a FROM Administrador a WHERE a.email = :email"),
+    @NamedQuery(name = "Administrador.findByNome", query = "SELECT a FROM Administrador a WHERE a.nome = :nome"),
+    @NamedQuery(name = "Administrador.findByCodRecuperacao", query = "SELECT a FROM Administrador a WHERE a.codRecuperacao = :codRecuperacao")})
 public class Administrador implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,6 +52,8 @@ public class Administrador implements Serializable {
     @Size(max = 100)
     @Column(name = "nome")
     private String nome;
+    @Column(name = "cod_recuperacao")
+    private Integer codRecuperacao;
 
     public Administrador() {
     }
@@ -92,6 +100,14 @@ public class Administrador implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Integer getCodRecuperacao() {
+        return codRecuperacao;
+    }
+
+    public void setCodRecuperacao(Integer codRecuperacao) {
+        this.codRecuperacao = codRecuperacao;
     }
 
     @Override
