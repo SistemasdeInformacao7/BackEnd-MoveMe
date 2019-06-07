@@ -127,6 +127,15 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public Usuario findUsuarioEmail(String email) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Usuario.class, email);
+        } finally {
+            em.close();
+        }
+    }
 
     public int getUsuarioCount() {
         EntityManager em = getEntityManager();
