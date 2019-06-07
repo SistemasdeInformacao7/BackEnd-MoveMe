@@ -64,7 +64,6 @@ public class MotoristaWS {
         }
         return saida;
     }
-
     
     @GET
     @Path("/{id}")

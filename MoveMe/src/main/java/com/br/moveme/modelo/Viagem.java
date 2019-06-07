@@ -6,10 +6,8 @@
 package com.br.moveme.modelo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,13 +28,16 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "viagem")
 @NamedQueries({
-    @NamedQuery(name = "Viagem.findAll", query = "SELECT v FROM Viagem v")})
+    @NamedQuery(name = "Viagem.findAll", query = "SELECT v FROM Viagem v"),
+    @NamedQuery(name = "Viagem.findById", query = "SELECT v FROM Viagem v WHERE v.id = :id"),
+    @NamedQuery(name = "Viagem.findByDia", query = "SELECT v FROM Viagem v WHERE v.dia = :dia"),
+    @NamedQuery(name = "Viagem.findByNota", query = "SELECT v FROM Viagem v WHERE v.nota = :nota")})
 public class Viagem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = true)
+    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Column(name = "dia")
@@ -54,8 +54,6 @@ public class Viagem implements Serializable {
     @JoinColumn(name = "idveiculo", referencedColumnName = "id")
     @ManyToOne
     private Veiculo idveiculo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "viagem")
-    private Collection<UsuarioViagem> usuarioViagemCollection;
 
     public Viagem() {
     }
@@ -110,14 +108,6 @@ public class Viagem implements Serializable {
 
     public void setIdveiculo(Veiculo idveiculo) {
         this.idveiculo = idveiculo;
-    }
-
-    public Collection<UsuarioViagem> getUsuarioViagemCollection() {
-        return usuarioViagemCollection;
-    }
-
-    public void setUsuarioViagemCollection(Collection<UsuarioViagem> usuarioViagemCollection) {
-        this.usuarioViagemCollection = usuarioViagemCollection;
     }
 
     @Override

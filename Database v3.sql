@@ -21,7 +21,11 @@ telefone VARCHAR(15)
 
 CREATE TABLE motorista (
 id INTEGER PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100)
+cnh VARCHAR(30)
+nome VARCHAR(100),
+email VARCHAR(100),
+fone VARCHAR(20),
+status TINYINT(1)
 );
 
 CREATE TABLE veiculo (

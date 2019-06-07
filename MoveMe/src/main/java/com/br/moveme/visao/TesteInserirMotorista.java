@@ -18,6 +18,10 @@ public class TesteInserirMotorista {
     public static void main(String[] args) {
         Motorista motorista = new Motorista();
         motorista.setNome("Don Juan");
+        motorista.setCnh("54BG8");
+        motorista.setEmail("motorista@email.com");
+        motorista.setFone("+5564987545689");
+        motorista.setStatus(1);
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         MotoristaJpaController motoristaJpaController = new MotoristaJpaController(emf);

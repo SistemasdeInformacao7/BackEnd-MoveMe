@@ -28,6 +28,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Veiculo.findAll", query = "SELECT v FROM Veiculo v")})
 public class Veiculo implements Serializable {
 
+    @OneToMany(mappedBy = "idveiculo")
+    private Collection<Viagem> viagemCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,6 +86,14 @@ public class Veiculo implements Serializable {
     @Override
     public String toString() {
         return "Veiculo{" + "id=" + id + ", numeroVagas=" + numeroVagas + '}';
+    }
+
+    public Collection<Viagem> getViagemCollection() {
+        return viagemCollection;
+    }
+
+    public void setViagemCollection(Collection<Viagem> viagemCollection) {
+        this.viagemCollection = viagemCollection;
     }
 
 }
