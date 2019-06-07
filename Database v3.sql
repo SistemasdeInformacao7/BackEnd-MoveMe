@@ -25,7 +25,7 @@ cnh VARCHAR(30)
 nome VARCHAR(100),
 email VARCHAR(100),
 fone VARCHAR(20),
-status TINYINT(1)
+status INT(11)
 );
 
 CREATE TABLE veiculo (
