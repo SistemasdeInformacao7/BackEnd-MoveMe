@@ -94,6 +94,26 @@ public class PassageiroWS {
         return saida;
     }
 
+    @GET
+    @Path("/recuperarsenha/{email}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String getPassageiroEmail(@PathParam("email") String email)  {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
+        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
+
+        Usuario usuario = null;
+        Gson gson = new Gson();
+        String saida = null;
+
+        try {
+            usuario = usuarioJpaController.findUsuarioEmail(email);
+            saida = new Gson().toJson(usuario);
+        } catch (Exception e) {
+            System.out.println("PassageiroWS - listar todos: " + e);
+        }
+        return saida;
+    }
+    
     @PUT
     @Path("/editar")
     @Consumes(MediaType.APPLICATION_JSON)
