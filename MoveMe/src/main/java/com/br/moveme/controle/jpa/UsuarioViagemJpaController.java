@@ -10,14 +10,13 @@ import com.br.moveme.controle.jpa.exceptions.PreexistingEntityException;
 import com.br.moveme.modelo.UsuarioViagem;
 import com.br.moveme.modelo.UsuarioViagemPK;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.br.moveme.modelo.Viagem;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -38,22 +37,13 @@ public class UsuarioViagemJpaController implements Serializable {
         if (usuarioViagem.getUsuarioViagemPK() == null) {
             usuarioViagem.setUsuarioViagemPK(new UsuarioViagemPK());
         }
-        usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
         usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
+        usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Viagem viagem = usuarioViagem.getViagem();
-            if (viagem != null) {
-                viagem = em.getReference(viagem.getClass(), viagem.getId());
-                usuarioViagem.setViagem(viagem);
-            }
             em.persist(usuarioViagem);
-            if (viagem != null) {
-                viagem.getUsuarioViagemCollection().add(usuarioViagem);
-                viagem = em.merge(viagem);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findUsuarioViagem(usuarioViagem.getUsuarioViagemPK()) != null) {
@@ -68,28 +58,13 @@ public class UsuarioViagemJpaController implements Serializable {
     }
 
     public void edit(UsuarioViagem usuarioViagem) throws NonexistentEntityException, Exception {
-        usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
         usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
+        usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            UsuarioViagem persistentUsuarioViagem = em.find(UsuarioViagem.class, usuarioViagem.getUsuarioViagemPK());
-            Viagem viagemOld = persistentUsuarioViagem.getViagem();
-            Viagem viagemNew = usuarioViagem.getViagem();
-            if (viagemNew != null) {
-                viagemNew = em.getReference(viagemNew.getClass(), viagemNew.getId());
-                usuarioViagem.setViagem(viagemNew);
-            }
             usuarioViagem = em.merge(usuarioViagem);
-            if (viagemOld != null && !viagemOld.equals(viagemNew)) {
-                viagemOld.getUsuarioViagemCollection().remove(usuarioViagem);
-                viagemOld = em.merge(viagemOld);
-            }
-            if (viagemNew != null && !viagemNew.equals(viagemOld)) {
-                viagemNew.getUsuarioViagemCollection().add(usuarioViagem);
-                viagemNew = em.merge(viagemNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -118,11 +93,6 @@ public class UsuarioViagemJpaController implements Serializable {
                 usuarioViagem.getUsuarioViagemPK();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuarioViagem with id " + id + " no longer exists.", enfe);
-            }
-            Viagem viagem = usuarioViagem.getViagem();
-            if (viagem != null) {
-                viagem.getUsuarioViagemCollection().remove(usuarioViagem);
-                viagem = em.merge(viagem);
             }
             em.remove(usuarioViagem);
             em.getTransaction().commit();

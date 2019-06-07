@@ -26,7 +26,13 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "motorista")
 @NamedQueries({
-    @NamedQuery(name = "Motorista.findAll", query = "SELECT m FROM Motorista m")})
+    @NamedQuery(name = "Motorista.findAll", query = "SELECT m FROM Motorista m"),
+    @NamedQuery(name = "Motorista.findById", query = "SELECT m FROM Motorista m WHERE m.id = :id"),
+    @NamedQuery(name = "Motorista.findByCnh", query = "SELECT m FROM Motorista m WHERE m.cnh = :cnh"),
+    @NamedQuery(name = "Motorista.findByNome", query = "SELECT m FROM Motorista m WHERE m.nome = :nome"),
+    @NamedQuery(name = "Motorista.findByEmail", query = "SELECT m FROM Motorista m WHERE m.email = :email"),
+    @NamedQuery(name = "Motorista.findByFone", query = "SELECT m FROM Motorista m WHERE m.fone = :fone"),
+    @NamedQuery(name = "Motorista.findByStatus", query = "SELECT m FROM Motorista m WHERE m.status = :status")})
 public class Motorista implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,9 +41,21 @@ public class Motorista implements Serializable {
     @Basic(optional = true)
     @Column(name = "id")
     private Integer id;
+    @Size(max = 30)
+    @Column(name = "cnh")
+    private String cnh;
     @Size(max = 100)
     @Column(name = "nome")
     private String nome;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 100)
+    @Column(name = "email")
+    private String email;
+    @Size(max = 20)
+    @Column(name = "fone")
+    private String fone;
+    @Column(name = "status")
+    private Integer status;
 
     public Motorista() {
     }
@@ -54,12 +72,44 @@ public class Motorista implements Serializable {
         this.id = id;
     }
 
+    public String getCnh() {
+        return cnh;
+    }
+
+    public void setCnh(String cnh) {
+        this.cnh = cnh;
+    }
+
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFone() {
+        return fone;
+    }
+
+    public void setFone(String fone) {
+        this.fone = fone;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     @Override
@@ -84,7 +134,7 @@ public class Motorista implements Serializable {
 
     @Override
     public String toString() {
-        return "Motorista{" + "id=" + id + ", nome=" + nome + '}';
+        return "com.br.moveme.modelo.Motorista[ id=" + id + " ]";
     }
-
+    
 }

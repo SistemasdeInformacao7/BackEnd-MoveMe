@@ -6,12 +6,14 @@
 package com.br.moveme.modelo;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,6 +27,9 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
+
+    @OneToMany(mappedBy = "cpfusuario")
+    private Collection<Viagem> viagemCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -117,6 +122,14 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "Usuario{" + "cpf=" + cpf + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + '}';
+    }
+
+    public Collection<Viagem> getViagemCollection() {
+        return viagemCollection;
+    }
+
+    public void setViagemCollection(Collection<Viagem> viagemCollection) {
+        this.viagemCollection = viagemCollection;
     }
 
     

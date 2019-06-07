@@ -7,7 +7,8 @@ id INTEGER PRIMARY KEY AUTO_INCREMENT,
 foto VARCHAR(500),
 senha VARCHAR(100),
 email VARCHAR(100),
-nome VARCHAR(100)
+nome VARCHAR(100),
+cod_recuperacao INT(5)
 );
 
 CREATE TABLE usuario (
@@ -20,7 +21,11 @@ telefone VARCHAR(15)
 
 CREATE TABLE motorista (
 id INTEGER PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100)
+cnh VARCHAR(30),
+nome VARCHAR(100),
+email VARCHAR(100),
+fone VARCHAR(20),
+status INT(11)
 );
 
 CREATE TABLE veiculo (
