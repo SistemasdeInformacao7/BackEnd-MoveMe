@@ -9,20 +9,17 @@ import com.br.moveme.controle.jpa.exceptions.NonexistentEntityException;
 import com.br.moveme.controle.jpa.exceptions.PreexistingEntityException;
 import com.br.moveme.modelo.Usuario;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.br.moveme.modelo.Viagem;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 public class UsuarioJpaController implements Serializable {
 
@@ -36,29 +33,11 @@ public class UsuarioJpaController implements Serializable {
     }
 
     public void create(Usuario usuario) throws PreexistingEntityException, Exception {
-        if (usuario.getViagemCollection() == null) {
-            usuario.setViagemCollection(new ArrayList<Viagem>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Viagem> attachedViagemCollection = new ArrayList<Viagem>();
-            for (Viagem viagemCollectionViagemToAttach : usuario.getViagemCollection()) {
-                viagemCollectionViagemToAttach = em.getReference(viagemCollectionViagemToAttach.getClass(), viagemCollectionViagemToAttach.getId());
-                attachedViagemCollection.add(viagemCollectionViagemToAttach);
-            }
-            usuario.setViagemCollection(attachedViagemCollection);
             em.persist(usuario);
-            for (Viagem viagemCollectionViagem : usuario.getViagemCollection()) {
-                Usuario oldCpfusuarioOfViagemCollectionViagem = viagemCollectionViagem.getCpfusuario();
-                viagemCollectionViagem.setCpfusuario(usuario);
-                viagemCollectionViagem = em.merge(viagemCollectionViagem);
-                if (oldCpfusuarioOfViagemCollectionViagem != null) {
-                    oldCpfusuarioOfViagemCollectionViagem.getViagemCollection().remove(viagemCollectionViagem);
-                    oldCpfusuarioOfViagemCollectionViagem = em.merge(oldCpfusuarioOfViagemCollectionViagem);
-                }
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findUsuario(usuario.getCpf()) != null) {
@@ -77,34 +56,7 @@ public class UsuarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Usuario persistentUsuario = em.find(Usuario.class, usuario.getCpf());
-            Collection<Viagem> viagemCollectionOld = persistentUsuario.getViagemCollection();
-            Collection<Viagem> viagemCollectionNew = usuario.getViagemCollection();
-            Collection<Viagem> attachedViagemCollectionNew = new ArrayList<Viagem>();
-            for (Viagem viagemCollectionNewViagemToAttach : viagemCollectionNew) {
-                viagemCollectionNewViagemToAttach = em.getReference(viagemCollectionNewViagemToAttach.getClass(), viagemCollectionNewViagemToAttach.getId());
-                attachedViagemCollectionNew.add(viagemCollectionNewViagemToAttach);
-            }
-            viagemCollectionNew = attachedViagemCollectionNew;
-            usuario.setViagemCollection(viagemCollectionNew);
             usuario = em.merge(usuario);
-            for (Viagem viagemCollectionOldViagem : viagemCollectionOld) {
-                if (!viagemCollectionNew.contains(viagemCollectionOldViagem)) {
-                    viagemCollectionOldViagem.setCpfusuario(null);
-                    viagemCollectionOldViagem = em.merge(viagemCollectionOldViagem);
-                }
-            }
-            for (Viagem viagemCollectionNewViagem : viagemCollectionNew) {
-                if (!viagemCollectionOld.contains(viagemCollectionNewViagem)) {
-                    Usuario oldCpfusuarioOfViagemCollectionNewViagem = viagemCollectionNewViagem.getCpfusuario();
-                    viagemCollectionNewViagem.setCpfusuario(usuario);
-                    viagemCollectionNewViagem = em.merge(viagemCollectionNewViagem);
-                    if (oldCpfusuarioOfViagemCollectionNewViagem != null && !oldCpfusuarioOfViagemCollectionNewViagem.equals(usuario)) {
-                        oldCpfusuarioOfViagemCollectionNewViagem.getViagemCollection().remove(viagemCollectionNewViagem);
-                        oldCpfusuarioOfViagemCollectionNewViagem = em.merge(oldCpfusuarioOfViagemCollectionNewViagem);
-                    }
-                }
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -133,11 +85,6 @@ public class UsuarioJpaController implements Serializable {
                 usuario.getCpf();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
-            }
-            Collection<Viagem> viagemCollection = usuario.getViagemCollection();
-            for (Viagem viagemCollectionViagem : viagemCollection) {
-                viagemCollectionViagem.setCpfusuario(null);
-                viagemCollectionViagem = em.merge(viagemCollectionViagem);
             }
             em.remove(usuario);
             em.getTransaction().commit();

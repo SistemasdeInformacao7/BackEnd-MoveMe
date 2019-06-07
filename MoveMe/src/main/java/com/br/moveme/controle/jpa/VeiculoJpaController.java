@@ -21,7 +21,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 public class VeiculoJpaController implements Serializable {
 

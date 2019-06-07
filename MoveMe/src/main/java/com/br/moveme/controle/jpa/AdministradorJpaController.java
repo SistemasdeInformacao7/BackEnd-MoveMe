@@ -18,7 +18,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 public class AdministradorJpaController implements Serializable {
 

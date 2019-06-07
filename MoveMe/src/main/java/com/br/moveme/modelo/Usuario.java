@@ -28,9 +28,6 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
 
-    @OneToMany(mappedBy = "cpfusuario")
-    private Collection<Viagem> viagemCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -124,14 +121,4 @@ public class Usuario implements Serializable {
         return "Usuario{" + "cpf=" + cpf + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + '}';
     }
 
-    public Collection<Viagem> getViagemCollection() {
-        return viagemCollection;
-    }
-
-    public void setViagemCollection(Collection<Viagem> viagemCollection) {
-        this.viagemCollection = viagemCollection;
-    }
-
-    
-    
 }

@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 public class UsuarioViagemJpaController implements Serializable {
 
@@ -37,8 +37,8 @@ public class UsuarioViagemJpaController implements Serializable {
         if (usuarioViagem.getUsuarioViagemPK() == null) {
             usuarioViagem.setUsuarioViagemPK(new UsuarioViagemPK());
         }
-        usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
         usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
+        usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -58,8 +58,8 @@ public class UsuarioViagemJpaController implements Serializable {
     }
 
     public void edit(UsuarioViagem usuarioViagem) throws NonexistentEntityException, Exception {
-        usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
         usuarioViagem.getUsuarioViagemPK().setIdviagem(usuarioViagem.getViagem().getId());
+        usuarioViagem.getUsuarioViagemPK().setCpfusuario(usuarioViagem.getUsuario().getCpf());
         EntityManager em = null;
         try {
             em = getEntityManager();

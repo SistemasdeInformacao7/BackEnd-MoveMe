@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 @Entity
 @Table(name = "motorista")
@@ -38,7 +38,7 @@ public class Motorista implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = true)
+    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Size(max = 30)

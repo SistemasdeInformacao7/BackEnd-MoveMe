@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 @Entity
 @Table(name = "viagem")

@@ -11,7 +11,6 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.br.moveme.modelo.Usuario;
 import com.br.moveme.modelo.Veiculo;
 import com.br.moveme.modelo.Viagem;
 import java.util.List;
@@ -20,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 public class ViagemJpaController implements Serializable {
 
@@ -38,21 +37,12 @@ public class ViagemJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Usuario cpfusuario = viagem.getCpfusuario();
-            if (cpfusuario != null) {
-                cpfusuario = em.getReference(cpfusuario.getClass(), cpfusuario.getCpf());
-                viagem.setCpfusuario(cpfusuario);
-            }
             Veiculo idveiculo = viagem.getIdveiculo();
             if (idveiculo != null) {
                 idveiculo = em.getReference(idveiculo.getClass(), idveiculo.getId());
                 viagem.setIdveiculo(idveiculo);
             }
             em.persist(viagem);
-            if (cpfusuario != null) {
-                cpfusuario.getViagemCollection().add(viagem);
-                cpfusuario = em.merge(cpfusuario);
-            }
             if (idveiculo != null) {
                 idveiculo.getViagemCollection().add(viagem);
                 idveiculo = em.merge(idveiculo);
@@ -71,27 +61,13 @@ public class ViagemJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Viagem persistentViagem = em.find(Viagem.class, viagem.getId());
-            Usuario cpfusuarioOld = persistentViagem.getCpfusuario();
-            Usuario cpfusuarioNew = viagem.getCpfusuario();
             Veiculo idveiculoOld = persistentViagem.getIdveiculo();
             Veiculo idveiculoNew = viagem.getIdveiculo();
-            if (cpfusuarioNew != null) {
-                cpfusuarioNew = em.getReference(cpfusuarioNew.getClass(), cpfusuarioNew.getCpf());
-                viagem.setCpfusuario(cpfusuarioNew);
-            }
             if (idveiculoNew != null) {
                 idveiculoNew = em.getReference(idveiculoNew.getClass(), idveiculoNew.getId());
                 viagem.setIdveiculo(idveiculoNew);
             }
             viagem = em.merge(viagem);
-            if (cpfusuarioOld != null && !cpfusuarioOld.equals(cpfusuarioNew)) {
-                cpfusuarioOld.getViagemCollection().remove(viagem);
-                cpfusuarioOld = em.merge(cpfusuarioOld);
-            }
-            if (cpfusuarioNew != null && !cpfusuarioNew.equals(cpfusuarioOld)) {
-                cpfusuarioNew.getViagemCollection().add(viagem);
-                cpfusuarioNew = em.merge(cpfusuarioNew);
-            }
             if (idveiculoOld != null && !idveiculoOld.equals(idveiculoNew)) {
                 idveiculoOld.getViagemCollection().remove(viagem);
                 idveiculoOld = em.merge(idveiculoOld);
@@ -128,11 +104,6 @@ public class ViagemJpaController implements Serializable {
                 viagem.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The viagem with id " + id + " no longer exists.", enfe);
-            }
-            Usuario cpfusuario = viagem.getCpfusuario();
-            if (cpfusuario != null) {
-                cpfusuario.getViagemCollection().remove(viagem);
-                cpfusuario = em.merge(cpfusuario);
             }
             Veiculo idveiculo = viagem.getIdveiculo();
             if (idveiculo != null) {

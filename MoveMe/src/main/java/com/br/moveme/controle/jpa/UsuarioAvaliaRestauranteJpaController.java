@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author omupa
+ * @author root
  */
 public class UsuarioAvaliaRestauranteJpaController implements Serializable {
 
