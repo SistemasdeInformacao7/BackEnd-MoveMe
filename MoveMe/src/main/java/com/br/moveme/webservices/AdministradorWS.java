@@ -101,6 +101,7 @@ public class AdministradorWS {
             administrador1.setEmail(administrador.getEmail());
             administrador1.setFoto(administrador.getFoto());
             administrador1.setSenha(administrador.getSenha());
+            administrador1.setCodRecuperacao(administrador.getCodRecuperacao());
             em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("AdministradorWS - erro ao editar: " + e);

@@ -97,6 +97,10 @@ public class MotoristaWS {
         try {
             em.getTransaction().begin();
             motorista1.setNome(motorista.getNome());
+            motorista1.setCnh(motorista.getCnh());
+            motorista1.setEmail(motorista.getEmail());
+            motorista1.setFone(motorista.getFone());
+            motorista1.setStatus(motorista.getStatus());
             em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("MotoristaWS - erro ao editar: " + e);

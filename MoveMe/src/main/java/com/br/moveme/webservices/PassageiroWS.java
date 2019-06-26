@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,6 +21,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -80,7 +82,7 @@ public class PassageiroWS {
     public String get(@PathParam("cpf") String cpf)  {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
-
+        System.out.println(cpf);
         Usuario usuario = null;
         Gson gson = new Gson();
         String saida = null;
@@ -95,18 +97,19 @@ public class PassageiroWS {
     }
 
     @GET
-    @Path("/recuperarsenha/{email}")
+    @Path("/recuperarsenha")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String getPassageiroEmail(@PathParam("email") String email)  {
+    public String getPassageiroEmail(@QueryParam("email") String email)  {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("movemePU");
-        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
+        EntityManager em = emf.createEntityManager();
+        
+        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.email LIKE :email", Usuario.class).setParameter("email", email);
 
         Usuario usuario = null;
-        Gson gson = new Gson();
         String saida = null;
 
         try {
-            usuario = usuarioJpaController.findUsuarioEmail(email);
+            usuario = (Usuario) query.getSingleResult();
             saida = new Gson().toJson(usuario);
         } catch (Exception e) {
             System.out.println("PassageiroWS - listar todos: " + e);
